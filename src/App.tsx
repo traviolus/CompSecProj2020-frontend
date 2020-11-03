@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Home, Signin, Signup } from "views";
-import { AuthContext, Navbar, ShortenRedirect } from "components";
+import { AuthContext, Navbar } from "components";
 import { getToken } from "helpers/Auth";
 
 function App() {
@@ -33,9 +33,6 @@ function App() {
             </Route>
             <Route exact path="/signup">
               <Signup />
-            </Route>
-            <Route path="/:shorten">
-              <ShortenRedirect />
             </Route>
           </Switch>
         </div>

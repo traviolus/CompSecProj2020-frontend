@@ -1,1 +1,1 @@
-# CompSecProj2020-frontend
+Com secure term project

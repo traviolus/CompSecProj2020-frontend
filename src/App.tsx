@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { Home, Signin, Signup } from "views";
+import { Home, Signin, Signup, Post } from "views";
 import { AuthContext, Navbar } from "components";
 import { getToken } from "helpers/Auth";
 
@@ -33,6 +33,9 @@ function App() {
             </Route>
             <Route exact path="/signup">
               <Signup />
+            </Route>
+            <Route exact path="/post">
+              <Post />
             </Route>
           </Switch>
         </div>

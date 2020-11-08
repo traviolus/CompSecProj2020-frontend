@@ -1,30 +1,33 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 
+import client from "api/httpClient";
+
 import "styles/Home.scss";
 
 interface Topic {
   topic_id: number;
   topic_header: string;
-  topic_created_user: string;
-  topic_created_datetime: Date;
+  topic_user: string;
+  topic_createdtime: Date;
+}
+
+interface State {
+  data: Array<Topic>;
 }
 
 class Home extends React.Component {
-  data: Array<Topic> = [
-    {
-      topic_id: 1,
-      topic_header: "How to hack facebook",
-      topic_created_user: "armykongtap",
-      topic_created_datetime: new Date("2019-01-16 22:00:00"),
-    },
-    {
-      topic_id: 2,
-      topic_header: "How to hack ig",
-      topic_created_user: "armykongtap",
-      topic_created_datetime: new Date("2019-01-16 23:00:00"),
-    },
-  ];
+  state: State = {
+    data: [],
+  };
+  componentDidMount() {
+    client.get("api/topic/").then((response) => {
+      if (response.status === 200) {
+        this.setState({ data: response.data });
+      }
+      console.log(this.state.data);
+    });
+  }
 
   render() {
     return (
@@ -32,14 +35,14 @@ class Home extends React.Component {
         <div className="card-container">
           <div className="main-card">
             <ListGroup>
-              {this.data.map((i) => {
+              {this.state.data.map((i) => {
                 return (
-                  <ListGroup.Item>
+                  <ListGroup.Item key={i.topic_id}>
                     <a href={`/topic/${i.topic_id}`}>{i.topic_header}</a>
                     <div>
-                      <span className="username">{i.topic_created_user} </span>
+                      <span className="username">{i.topic_user} </span>
                       <span className="created_datetime">
-                        {i.topic_created_datetime.toLocaleString()}
+                        {i.topic_createdtime}
                       </span>
                     </div>
                   </ListGroup.Item>

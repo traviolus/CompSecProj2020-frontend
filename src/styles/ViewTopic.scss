@@ -1,0 +1,39 @@
+@import "./main.scss";
+
+.view-topic-page {
+  @extend .body;
+
+  .content-container {
+    max-width: 1000px;
+    margin: auto;
+
+    .topic-container {
+      .topic {
+        .username {
+          font-size: 80%;
+          margin-right: 8px;
+        }
+        .created_datetime {
+          font-size: 60%;
+        }
+      }
+    }
+
+    .comment-container {
+      .comment-topic {
+        margin-top: 50px;
+      }
+
+      .comment {
+        margin-bottom: 20px;
+        .username {
+          font-size: 80%;
+          margin-right: 8px;
+        }
+        .created_datetime {
+          font-size: 60%;
+        }
+      }
+    }
+  }
+}

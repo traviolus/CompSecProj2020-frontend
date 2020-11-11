@@ -48,4 +48,26 @@ const getCommentsByTopicId = async (
     });
 };
 
-export { getTopicById, getCommentsByTopicId };
+const addComment = async (
+  topic_id: string,
+  comment: string
+): Promise<string> => {
+  const body = {
+    topic_id,
+    comment,
+  };
+
+  return await client
+    .post(`api/comment/`, body)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data;
+      }
+      throw Error(response.toString());
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export { getTopicById, getCommentsByTopicId, addComment };

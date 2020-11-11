@@ -1,8 +1,8 @@
 import React, { FormEvent } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import { Button, Card, Form } from "react-bootstrap";
 
-import { getTopicById, getCommentsByTopicId } from "api/viewTopic";
+import { getTopicById, getCommentsByTopicId, addComment } from "api/viewTopic";
 
 import "styles/ViewTopic.scss";
 
@@ -27,6 +27,7 @@ interface State {
   topic: TopicData;
   comments: Array<CommentData>;
   addComment: string;
+  redirect: string;
 }
 
 class ViewTopic extends React.Component<
@@ -55,10 +56,24 @@ class ViewTopic extends React.Component<
       },
     ],
     addComment: "",
+    redirect: "",
   };
 
-  componentDidMount = async () => {
-    const topicId = this.props.match.params.topicId;
+  componentDidMount = () => {
+    this.handleLoadData();
+  };
+
+  handleLoadData = async () => {
+    let topicId = "0";
+    try {
+      topicId = this.props.match.params.topicId;
+    } catch (error) {
+      this.setState({ redirect: "/" });
+    }
+
+    if (!topicId) {
+      this.setState({ redirect: "/" });
+    }
     const [topicData, commentsData] = await Promise.all([
       getTopicById(topicId),
       getCommentsByTopicId(topicId),
@@ -86,12 +101,27 @@ class ViewTopic extends React.Component<
     this.setState({ topic, comments });
   };
 
-  handleAddComment = (e: FormEvent) => {
+  handleAddCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { target } = e;
+    this.setState({ addComment: target.value });
+  };
+
+  handleAddComment = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(e);
+    const result = await addComment(
+      this.props.match.params.topicId,
+      this.state.addComment
+    );
+    if (result) {
+      this.setState({ addComment: "" });
+      this.handleLoadData();
+    }
   };
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
     return (
       <div className="view-topic-page">
         <div className="content-container">
@@ -133,6 +163,7 @@ class ViewTopic extends React.Component<
                       <Form.Control
                         as="textarea"
                         rows={3}
+                        value={this.state.addComment}
                         onChange={this.handleAddCommentChange}
                       />
                     </Form.Group>

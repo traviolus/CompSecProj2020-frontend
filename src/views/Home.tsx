@@ -1,7 +1,7 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 
-import client from "api/httpClient";
+import allTopics from "api/allTopics";
 
 import "styles/Home.scss";
 
@@ -20,14 +20,12 @@ class Home extends React.Component {
   state: State = {
     data: [],
   };
-  componentDidMount() {
-    client.get("api/topic/").then((response) => {
-      if (response.status === 200) {
-        this.setState({ data: response.data });
-      }
-      console.log(this.state.data);
-    });
-  }
+  componentDidMount = async () => {
+    const result = await allTopics();
+    if (result) {
+      this.setState({ data: result });
+    }
+  };
 
   render() {
     return (

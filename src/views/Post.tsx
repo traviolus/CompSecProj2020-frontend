@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 
 import post from "api/post";
 import { AuthContext } from "components";
@@ -29,15 +30,12 @@ class Post extends React.Component {
     isValidated: false,
   };
 
-  handlePostDataChange = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) => {
+  handlePostDataChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
     const postData = this.state.postData;
     if (name === "topic_header" || name === "topic_body") {
       postData[name] = value;
     }
-    console.log(postData);
     this.setState({ postData });
   };
 
@@ -51,15 +49,13 @@ class Post extends React.Component {
     if (form.checkValidity() === false) {
       this.setState({ isValidated: true });
     } else {
-      this.setState({ isPostFailed: false, isValidated: false});
+      this.setState({ isPostFailed: false, isValidated: false });
 
       try {
         const result = await post(this.state.postData);
         if (result) {
-          console.log("Post success!!!");
           this.setState({ isPost: true });
         } else {
-          console.log("Post failed!!!");
           this.setState({ isPostFailed: true });
         }
       } catch (error) {
@@ -70,14 +66,18 @@ class Post extends React.Component {
   };
 
   render() {
+    if (this.state.isPost) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="post-container">
         <div className="form-container">
           <div className="form-card">
-            <Form>
+            <Form onSubmit={this.handlePost}>
               <Form.Group controlId="formBasicTopic">
                 <Form.Label>Topic</Form.Label>
-                <Form.Control 
+                <Form.Control
                   required
                   type="topic_header"
                   name="topic_header"
@@ -88,20 +88,21 @@ class Post extends React.Component {
 
               <Form.Group controlId="formBasicBody">
                 <Form.Label>Content</Form.Label>
-                <Form.Control 
+                <Form.Control
                   required
-                  as="textarea" 
-                  rows={10} 
-                  type="topic_body" 
+                  as="textarea"
+                  rows={10}
+                  type="topic_body"
                   name="topic_body"
                   value={this.state.postData.topic_body}
                   onChange={this.handlePostDataChange}
                 />
               </Form.Group>
               <div className="content-right">
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   type="submit"
+                  disabled={this.state.isLoading}
                 >
                   Post
                 </Button>
@@ -109,7 +110,7 @@ class Post extends React.Component {
             </Form>
           </div>
         </div>
-      </div>      
+      </div>
     );
   }
 }

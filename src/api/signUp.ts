@@ -11,7 +11,6 @@ const signUp = async (signupData: props) : Promise<boolean> => {
   return await client
   .post("api/signup/", body)
   .then((response) => {
-    console.log(response);
     if (response.status === 200) {
       return true;
     }

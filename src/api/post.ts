@@ -8,7 +8,7 @@ interface props {
 const post = async (postData: props) : Promise<boolean> => {
     const body = postData;
     return await client
-    .post("api/post/", body)
+    .post("api/topic/", body)
     .then((response) => {
         console.log(response);
         if (response.status === 200) {

@@ -123,7 +123,7 @@ class ViewTopic extends React.Component<
           <FiEdit
             className="edit-icon"
             onClick={() =>
-              window.location.assign(`/post/${this.state.topic.topicId}`)
+              window.location.assign(`/edittopic/${this.state.topic.topicId}`)
             }
           />
           <FiTrash2 className="trash-icon" />
@@ -132,7 +132,12 @@ class ViewTopic extends React.Component<
     } else if (getUsername() === this.state.topic.author) {
       return (
         <>
-          <FiEdit className="edit-icon" />
+          <FiEdit
+            className="edit-icon"
+            onClick={() =>
+              window.location.assign(`/edittopic/${this.state.topic.topicId}`)
+            }
+          />
         </>
       );
     }
@@ -172,6 +177,27 @@ class ViewTopic extends React.Component<
               return (
                 <Card className="comment" key={comment.commentId}>
                   <Card.Body>
+                    {getUsername() === comment.author ||
+                    getUserStatus() === "admin" ? (
+                      <Card.Title
+                        style={{
+                          position: "absolute",
+                          right: "20px"
+                        }}
+                        className="icon"
+                      >
+                        <FiEdit
+                          className="edit-icon"
+                          onClick={() =>
+                            window.location.assign(
+                              `/editcomment/${comment.commentId}`
+                            )
+                          }
+                        />
+                      </Card.Title>
+                    ) : (
+                      ""
+                    )}
                     <Card.Text>{comment.message}</Card.Text>
                     <span className="username">{comment.author}</span>
                     <span className="created_datetime">

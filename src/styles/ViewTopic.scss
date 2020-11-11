@@ -3,6 +3,17 @@
 .view-topic-page {
   @extend .body;
 
+  .icon {
+    * {
+      cursor: pointer;
+      margin-left: 10px;
+
+      &:hover {
+        color: gray;
+      }
+    }
+  }
+
   .content-container {
     max-width: 1000px;
     margin: auto;
@@ -13,17 +24,6 @@
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-
-          .icon {
-            * {
-              cursor: pointer;
-              margin-left: 10px;
-
-              &:hover {
-                color: gray;
-              }
-            }
-          }
         }
         .username {
           font-size: 80%;

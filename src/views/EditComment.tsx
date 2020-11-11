@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Button, Card, Form } from "react-bootstrap";
 
@@ -15,8 +15,18 @@ interface CommentData {
   timestamp: string;
 }
 
-const EditComment: FC<RouteComponentProps<RouterProps>> = ({ match }) => {
+const EditComment: FC<RouteComponentProps<RouterProps>> = ({
+  match: {
+    params: { commentId },
+  },
+}) => {
+  const [commentData, setCommentData] = useState<CommentData | null>(null);
+
   useEffect(() => {
+    if (!commentId) {
+      window.location.assign("/");
+    }
+
     // LOAD DATA
   }, []);
 

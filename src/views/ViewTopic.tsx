@@ -183,9 +183,6 @@ class ViewTopic extends React.Component<
                         style={{
                           position: "absolute",
                           right: "20px"
-                          // display: "flex",
-                          // flexDirection: "row",
-                          // justifyContent: "flex-end",
                         }}
                         className="icon"
                       >

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Nav, Navbar as BootstrapNavbar } from "react-bootstrap";
+import { Button, Nav, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import { removeToken, removeUsername } from "helpers/Auth";
@@ -18,6 +18,9 @@ const Navbar: React.FunctionComponent = () => {
         setLoggedIn(false);
       }
       history.push("/");
+    } else if (loggedIn && command === "newpost") {
+      // new post
+      history.push("/post");
     } else {
       if (command === "signin") {
         // sign in
@@ -37,7 +40,7 @@ const Navbar: React.FunctionComponent = () => {
       variant="dark"
       sticky="top"
     >
-      <BootstrapNavbar.Brand href="/">idk.ly</BootstrapNavbar.Brand>
+      <BootstrapNavbar.Brand href="/">Pandip</BootstrapNavbar.Brand>
       <BootstrapNavbar.Toggle aria-controls="responsive-navbar-nav" />
       <BootstrapNavbar.Collapse
         id="responsive-navbar-nav"
@@ -45,9 +48,14 @@ const Navbar: React.FunctionComponent = () => {
       >
         <Nav>
           {loggedIn ? (
-            <Nav.Link onClick={() => handleNavClick("signout")}>
-              Sign out
-            </Nav.Link>
+            <>
+              <Button variant="info" style={{marginRight: "10px"}} onClick={() => handleNavClick("newpost")}>
+                New post
+              </Button>
+              <Nav.Link onClick={() => handleNavClick("signout")}>
+                Sign out
+              </Nav.Link>
+            </>
           ) : (
             <>
               <Nav.Link onClick={() => handleNavClick("signin")}>

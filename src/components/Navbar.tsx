@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button, Nav, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
-import { removeToken, removeUsername } from "helpers/Auth";
+import { removeToken, removeUsername, removeUserStatus } from "helpers/Auth";
 import AuthContext from "./AuthContext";
 
 const Navbar: React.FunctionComponent = () => {
@@ -14,6 +14,7 @@ const Navbar: React.FunctionComponent = () => {
       // sign out
       removeToken();
       removeUsername();
+      removeUserStatus();
       if (setLoggedIn) {
         setLoggedIn(false);
       }
@@ -49,7 +50,11 @@ const Navbar: React.FunctionComponent = () => {
         <Nav>
           {loggedIn ? (
             <>
-              <Button variant="info" style={{marginRight: "10px"}} onClick={() => handleNavClick("newpost")}>
+              <Button
+                variant="info"
+                style={{ marginRight: "10px" }}
+                onClick={() => handleNavClick("newpost")}
+              >
                 New post
               </Button>
               <Nav.Link onClick={() => handleNavClick("signout")}>

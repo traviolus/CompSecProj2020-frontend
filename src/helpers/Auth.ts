@@ -14,10 +14,22 @@ export const getUsername = (): string => {
   return localStorage.getItem("username") || "";
 };
 
-export const setUsername = (token: string): void => {
-  localStorage.setItem("username", token);
+export const setUsername = (username: string): void => {
+  localStorage.setItem("username", username);
 };
 
 export const removeUsername = (): void => {
   localStorage.removeItem("username");
+};
+
+export const getUserStatus = (): string => {
+  return localStorage.getItem("user_status") || "";
+};
+
+export const setUserStatus = (userstatus: string): void => {
+  localStorage.setItem("userstatus", userstatus);
+};
+
+export const removeUserStatus = (): void => {
+  localStorage.removeItem("userstatus");
 };

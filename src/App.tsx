@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { Home, Signin, Signup, ViewTopic, Post, EditComment } from "views";
+import { Home, Signin, Signup, ViewTopic, Post, EditTopic,EditComment } from "views";
 import { AuthContext, Navbar } from "components";
 import { getToken } from "helpers/Auth";
 
@@ -43,6 +43,7 @@ function App() {
               path="/editcomment/:commentId"
               component={EditComment}
             />
+            <Route exact path ="/edittopic/:topicId" component={EditTopic} />
           </Switch>
         </div>
       </Router>

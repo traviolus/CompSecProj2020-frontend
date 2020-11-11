@@ -3,12 +3,28 @@
 .view-topic-page {
   @extend .body;
 
+  .icon {
+    * {
+      cursor: pointer;
+      margin-left: 10px;
+
+      &:hover {
+        color: gray;
+      }
+    }
+  }
+
   .content-container {
     max-width: 1000px;
     margin: auto;
 
     .topic-container {
       .topic {
+        .header {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
         .username {
           font-size: 80%;
           margin-right: 8px;

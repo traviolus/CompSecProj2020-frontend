@@ -1,5 +1,5 @@
 import client from "./httpClient";
-import { setToken, setUsername } from "helpers/Auth";
+import { setToken, setUsername, setUserStatus } from "helpers/Auth";
 
 export interface Props {
   usernameEmail: string;
@@ -18,6 +18,7 @@ const signIn = async (props: Props): Promise<boolean> => {
         const token = `Bearer ${response.data.access}`;
         setToken(token);
         setUsername(response.data.user_name);
+        setUserStatus(response.data.user_status);
 
         return true;
       }

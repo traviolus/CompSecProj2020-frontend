@@ -5,10 +5,19 @@ interface EditData {
   topic_body: string;
 }
 
-const editTopic = async (editData: EditData): Promise<boolean> => {
-  const body = editData
+interface InputData {
+  topic_header: string;
+  topic_body: string;
+  topic_id: string;
+}
+
+const editTopic = async (inputData: InputData): Promise<boolean> => {
+  const body: EditData = {
+    topic_header: inputData.topic_header,
+    topic_body: inputData.topic_body,
+  }
   return await client
-    .patch(`/api/topic/${editData}`, body)
+    .patch(`/api/topic/${inputData.topic_id}`, body)
     .then((response) => {
       if (response.status === 200) {
         return true;

@@ -13,23 +13,26 @@ interface RouterProps {
 }
 
 interface TopicData {
+  topicId: number;
   title: string;
   body: string;
   author: string;
   timestamp: string;
 }
 
+interface EditData {
+  topic_header: string;
+  topic_body: string;
+  topic_id: string;
+}
+
 interface State {
-  editData: {
-    topic_header: string;
-    topic_body: string;
-  };
+  editData: EditData;
   isLoading: boolean;
   isEdit: boolean;
   isEditFailed: boolean;
   isValidated: boolean;
   redirect: string;
-  topicId: string;
 }
 
 class EditTopic extends React.Component<RouteComponentProps<RouterProps>,
@@ -38,20 +41,19 @@ State> {
     editData: {
       topic_header: "",
       topic_body: "",
+      topic_id: "0",
     },
     isLoading: false,
     isEdit: false,
     isEditFailed: false,
     isValidated: false,
     redirect: "/",
-    topicId: "0",
   };
 
   componentDidMount = async () => {
       let topicId = "0";
       try {
         topicId = this.props.match.params.topicId;
-        this.setState({ topicId })
       } catch (error) {
         this.setState({ redirect:  "/" });
       }
@@ -61,7 +63,14 @@ State> {
       }
 
       const topicData = await getTopicById(topicId);
-      console.log(topicData)
+      
+      const editData: EditData = {
+        topic_header: topicData.topic_header,
+        topic_body: topicData.topic_body,
+        topic_id: topicData.topic_id.toString(),
+      }
+
+      this.setState({ editData, isLoading: false });
   }
 
   handleEditDataChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +95,7 @@ State> {
       this.setState({ isEditFailed: false, isValidated: false });
 
       try {
-        const result = await editPost(this.state.editData);
+        const result = await editTopic(this.state.editData);
         if (result) {
           this.setState({ isEdit: true });
         } else {
@@ -101,7 +110,7 @@ State> {
 
   render() {
     if (this.state.isEdit) {
-      return <Redirect to={`/topic/${this.state.topicId}`} />;
+      return <Redirect to={`/topic/${this.state.editData.topic_id}`} />;
     }
 
     return (
@@ -116,6 +125,7 @@ State> {
                   type="topic_header"
                   name="topic_header"
                   value={this.state.editData.topic_header}
+                  placeholder={this.state.editData.topic_header}
                   onChange={this.handleEditDataChange}
                 />
               </Form.Group>
@@ -129,6 +139,7 @@ State> {
                   type="topic_body"
                   name="topic_body"
                   value={this.state.editData.topic_body}
+                  placeholder={this.state.editData.topic_body}
                   onChange={this.handleEditDataChange}
                 />
               </Form.Group>

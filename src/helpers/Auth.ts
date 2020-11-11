@@ -23,7 +23,7 @@ export const removeUsername = (): void => {
 };
 
 export const getUserStatus = (): string => {
-  return localStorage.getItem("user_status") || "";
+  return localStorage.getItem("userstatus") || "";
 };
 
 export const setUserStatus = (userstatus: string): void => {

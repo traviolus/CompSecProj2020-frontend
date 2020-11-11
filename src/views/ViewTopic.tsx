@@ -1,8 +1,11 @@
 import React, { FormEvent } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { Button, Card, Form } from "react-bootstrap";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
+import { LoadingIcon } from "components";
 import { getTopicById, getCommentsByTopicId, addComment } from "api/viewTopic";
+import { getUsername, getUserStatus } from "helpers/Auth";
 
 import "styles/ViewTopic.scss";
 
@@ -11,6 +14,7 @@ interface RouterProps {
 }
 
 interface TopicData {
+  topicId: number;
   title: string;
   body: string;
   author: string;
@@ -25,9 +29,10 @@ interface CommentData {
 }
 interface State {
   topic: TopicData;
-  comments: Array<CommentData>;
+  comments: CommentData[];
   addComment: string;
   redirect: string;
+  isLoading: boolean;
 }
 
 class ViewTopic extends React.Component<
@@ -36,27 +41,16 @@ class ViewTopic extends React.Component<
 > {
   state = {
     topic: {
+      topicId: 0,
       title: "",
       body: "",
       author: "",
       timestamp: "",
     },
-    comments: [
-      {
-        commentId: 1,
-        message: "WOWWWWW",
-        author: "Kritsana Khankaew",
-        timestamp: "13 Dec 2020",
-      },
-      {
-        commentId: 2,
-        message: "Great job !",
-        author: "Kongtap",
-        timestamp: "13 Dec 2020",
-      },
-    ],
+    comments: [],
     addComment: "",
     redirect: "",
+    isLoading: false,
   };
 
   componentDidMount = () => {
@@ -64,6 +58,7 @@ class ViewTopic extends React.Component<
   };
 
   handleLoadData = async () => {
+    this.setState({ isLoading: true });
     let topicId = "0";
     try {
       topicId = this.props.match.params.topicId;
@@ -80,6 +75,7 @@ class ViewTopic extends React.Component<
     ]);
 
     const topic: TopicData = {
+      topicId: topicData.topic_id,
       title: topicData.topic_header,
       body: topicData.topic_body,
       author: topicData.topic_user,
@@ -98,7 +94,7 @@ class ViewTopic extends React.Component<
       return comment_output;
     });
 
-    this.setState({ topic, comments });
+    this.setState({ topic, comments, isLoading: false });
   };
 
   handleAddCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,18 +114,49 @@ class ViewTopic extends React.Component<
     }
   };
 
+  IconGroup = () => {
+    console.log(getUserStatus());
+    console.log(getUserStatus() === "admin");
+    if (getUserStatus() === "admin") {
+      return (
+        <>
+          <FiEdit
+            className="edit-icon"
+            onClick={() =>
+              window.location.assign(`/post/${this.state.topic.topicId}`)
+            }
+          />
+          <FiTrash2 className="trash-icon" />
+        </>
+      );
+    } else if (getUsername() === this.state.topic.author) {
+      return (
+        <>
+          <FiEdit className="edit-icon" />
+        </>
+      );
+    }
+    return "";
+  };
+
   render() {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
+
+    if (this.state.isLoading) {
+      return <LoadingIcon />;
+    }
+
     return (
       <div className="view-topic-page">
         <div className="content-container">
           <div className="topic-container">
             <Card className="topic">
               <Card.Body>
-                <Card.Title>
+                <Card.Title className="header">
                   <h2>{this.state.topic.title}</h2>
+                  <div className="icon">{this.IconGroup()}</div>
                 </Card.Title>
                 <Card.Text>{this.state.topic.body}</Card.Text>
                 <span className="username">{this.state.topic.author}</span>
@@ -141,7 +168,7 @@ class ViewTopic extends React.Component<
           </div>
           <div className="comment-container">
             <h5 className="comment-topic">Comments</h5>
-            {this.state.comments.map((comment) => {
+            {this.state.comments.map((comment: CommentData) => {
               return (
                 <Card className="comment" key={comment.commentId}>
                   <Card.Body>

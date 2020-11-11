@@ -9,6 +9,22 @@
 
     .topic-container {
       .topic {
+        .header {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .icon {
+            * {
+              cursor: pointer;
+              margin-left: 10px;
+
+              &:hover {
+                color: gray;
+              }
+            }
+          }
+        }
         .username {
           font-size: 80%;
           margin-right: 8px;

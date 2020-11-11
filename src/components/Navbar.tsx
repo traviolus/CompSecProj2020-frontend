@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Nav, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
-import { removeToken } from "helpers/Auth";
+import { removeToken, removeUsername } from "helpers/Auth";
 import AuthContext from "./AuthContext";
 
 const Navbar: React.FunctionComponent = () => {
@@ -13,6 +13,7 @@ const Navbar: React.FunctionComponent = () => {
     if (loggedIn && command === "signout") {
       // sign out
       removeToken();
+      removeUsername();
       if (setLoggedIn) {
         setLoggedIn(false);
       }

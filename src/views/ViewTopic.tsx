@@ -1,7 +1,9 @@
 import React, { FormEvent } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { Button, Card, Form } from "react-bootstrap";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
+import { LoadingIcon } from "components";
 import { getTopicById, getCommentsByTopicId, addComment } from "api/viewTopic";
 
 import "styles/ViewTopic.scss";
@@ -28,6 +30,7 @@ interface State {
   comments: Array<CommentData>;
   addComment: string;
   redirect: string;
+  isLoading: boolean;
 }
 
 class ViewTopic extends React.Component<
@@ -41,22 +44,10 @@ class ViewTopic extends React.Component<
       author: "",
       timestamp: "",
     },
-    comments: [
-      {
-        commentId: 1,
-        message: "WOWWWWW",
-        author: "Kritsana Khankaew",
-        timestamp: "13 Dec 2020",
-      },
-      {
-        commentId: 2,
-        message: "Great job !",
-        author: "Kongtap",
-        timestamp: "13 Dec 2020",
-      },
-    ],
+    comments: [],
     addComment: "",
     redirect: "",
+    isLoading: false,
   };
 
   componentDidMount = () => {
@@ -64,6 +55,7 @@ class ViewTopic extends React.Component<
   };
 
   handleLoadData = async () => {
+    this.setState({ isLoading: true });
     let topicId = "0";
     try {
       topicId = this.props.match.params.topicId;
@@ -98,7 +90,7 @@ class ViewTopic extends React.Component<
       return comment_output;
     });
 
-    this.setState({ topic, comments });
+    this.setState({ topic, comments, isLoading: false });
   };
 
   handleAddCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,14 +114,23 @@ class ViewTopic extends React.Component<
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
+
+    if (this.state.isLoading) {
+      return <LoadingIcon />;
+    }
+
     return (
       <div className="view-topic-page">
         <div className="content-container">
           <div className="topic-container">
             <Card className="topic">
               <Card.Body>
-                <Card.Title>
+                <Card.Title className="header">
                   <h2>{this.state.topic.title}</h2>
+                  <div className="icon">
+                    <FiEdit className="edit-icon" />
+                    <FiTrash2 className="trash-icon" />
+                  </div>
                 </Card.Title>
                 <Card.Text>{this.state.topic.body}</Card.Text>
                 <span className="username">{this.state.topic.author}</span>

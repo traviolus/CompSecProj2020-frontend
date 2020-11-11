@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken, removeToken } from "helpers/Auth";
+import { getToken, removeToken, removeUsername } from "helpers/Auth";
 
 const client = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL || "",
@@ -12,6 +12,7 @@ const client = axios.create({
 client.interceptors.response.use(
   (response) => {
     if (response.status === 401) {
+      removeUsername();
       removeToken();
       window.location.assign("/signin");
       throw new axios.Cancel("401: Unauthorized");
@@ -19,6 +20,12 @@ client.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response.status === 401) {
+      removeUsername();
+      removeToken();
+      window.location.assign("/signin");
+      throw new axios.Cancel("401: Unauthorized");
+    }
     return Promise.reject(error);
   }
 );

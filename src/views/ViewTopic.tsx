@@ -5,6 +5,7 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 import { LoadingIcon } from "components";
 import { getTopicById, getCommentsByTopicId, addComment } from "api/viewTopic";
+import { deleteTopic } from "api/editTopic";
 import { getUsername, getUserStatus } from "helpers/Auth";
 
 import "styles/ViewTopic.scss";
@@ -114,6 +115,11 @@ class ViewTopic extends React.Component<
     }
   };
 
+  handleDeleteTopic = async () => {
+    await deleteTopic(this.state.topic.topicId);
+    this.setState({ redirect: "/" });
+  };
+
   IconGroup = () => {
     console.log(getUserStatus());
     console.log(getUserStatus() === "admin");
@@ -126,7 +132,7 @@ class ViewTopic extends React.Component<
               window.location.assign(`/edittopic/${this.state.topic.topicId}`)
             }
           />
-          <FiTrash2 className="trash-icon" />
+          <FiTrash2 className="trash-icon" onClick={this.handleDeleteTopic} />
         </>
       );
     } else if (getUsername() === this.state.topic.author) {
@@ -182,7 +188,7 @@ class ViewTopic extends React.Component<
                       <Card.Title
                         style={{
                           position: "absolute",
-                          right: "20px"
+                          right: "20px",
                         }}
                         className="icon"
                       >

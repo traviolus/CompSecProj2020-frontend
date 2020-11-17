@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 
-import editTopic from "api/editTopic";
+import { editTopic } from "api/editTopic";
 import { getTopicById } from "api/viewTopic";
 import { AuthContext } from "components";
 

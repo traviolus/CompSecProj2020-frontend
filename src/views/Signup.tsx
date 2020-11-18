@@ -1,11 +1,26 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import passwordValidator from "password-validator";
 
 import { AuthContext } from "components";
 import signUp from "api/signUp";
 
 import "styles/Signup.scss";
+
+const validator = new passwordValidator();
+
+validator
+  .is()
+  .min(8)
+  .is()
+  .max(20)
+  .has()
+  .uppercase(1)
+  .has()
+  .lowercase(1)
+  .has()
+  .symbols(1);
 
 class Signup extends React.Component {
   state = {
@@ -33,6 +48,14 @@ class Signup extends React.Component {
 
   handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validator.validate(this.state.signupData.password)) {
+      alert(
+        "Password must be at least 8 charactors and has UPPER and lower case with symbol."
+      );
+      this.setState({ isSignupFailed: true, isValidated: false });
+      return;
+    }
 
     this.setState({ isLoading: true });
 

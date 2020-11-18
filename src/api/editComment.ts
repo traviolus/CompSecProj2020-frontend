@@ -9,7 +9,7 @@ interface CommentsResponse {
 }
 
 const getCommentById = (commentId: string): Promise<CommentsResponse> => {
-  return client.get(`/api/comment/${commentId}`).then((response) => {
+  return client.get(`/api/comment/${commentId}/`).then((response) => {
     if (response.status === 200) {
       return response.data;
     }
@@ -23,7 +23,7 @@ const editComment = (
   comment_text: string
 ): Promise<boolean> => {
   return client
-    .patch(`/api/comment/${commentId}`, { comment_text })
+    .patch(`/api/comment/${commentId}/`, { comment_text })
     .then((response) => {
       if (response.status === 200) {
         return true;

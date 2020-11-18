@@ -17,7 +17,7 @@ const editTopic = async (inputData: InputData): Promise<boolean> => {
     topic_body: inputData.topic_body,
   };
   return await client
-    .patch(`/api/topic/${inputData.topic_id}`, body)
+    .patch(`/api/topic/${inputData.topic_id}/`, body)
     .then((response) => {
       if (response.status === 200) {
         return true;
@@ -34,7 +34,7 @@ const editTopic = async (inputData: InputData): Promise<boolean> => {
 
 const deleteTopic = async (topicId: number): Promise<boolean> => {
   return await client
-    .delete(`/api/topic/${topicId}`)
+    .delete(`/api/topic/${topicId}/`)
     .then((response) => {
       if (response.status === 200) {
         return true;
